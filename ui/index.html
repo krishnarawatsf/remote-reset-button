@@ -21,10 +21,10 @@
         A teacher-friendly walkthrough of how RESTCONF automation replaces manual field visits.
       </p>
       <div class="hero-chips">
-        <span>Python</span>
+        <span>Java Spring Boot</span>
         <span>RESTCONF RFC 8040</span>
         <span>ietf-interfaces YANG</span>
-        <span>Cisco IOS-XE / Mock Device</span>
+        <span>Cisco IOS-XE</span>
       </div>
       <div class="mode-actions">
         <a class="action-btn" href="index.html?mode=present">Start Presentation Mode</a>
@@ -62,12 +62,12 @@
 
       <section class="card architecture" data-slide="2">
         <h2>2) Solution Architecture</h2>
-        <div class="flow" role="img" aria-label="Workflow from script to RESTCONF API and interface state change">
-          <div class="node">find_device.py</div>
+        <div class="flow" role="img" aria-label="Workflow from Java CLI command to RESTCONF API and interface state change">
+          <div class="node">find Camera 2</div>
           <div class="arrow">GET</div>
           <div class="node">RESTCONF API</div>
           <div class="arrow">PATCH</div>
-          <div class="node">reboot_port.py</div>
+          <div class="node">reboot GigabitEthernet2</div>
           <div class="arrow">state</div>
           <div class="node">Interface UP</div>
         </div>
@@ -89,7 +89,7 @@
 
         <div class="panel active" id="phase1" role="tabpanel">
           <p>Find which interface owns a device by name or description.</p>
-          <pre><code>python3 find_device.py "Camera 2"</code></pre>
+          <pre><code>cd java && mvn spring-boot:run -Dspring-boot.run.arguments="find Camera 2"</code></pre>
           <ul>
             <li>Calls GET on interface collection.</li>
             <li>Matches on <code>name</code> and <code>description</code>.</li>
@@ -99,7 +99,7 @@
 
         <div class="panel" id="phase2" role="tabpanel">
           <p>Power-cycle a port remotely with safe partial updates.</p>
-          <pre><code>python3 reboot_port.py GigabitEthernet2</code></pre>
+          <pre><code>cd java && mvn spring-boot:run -Dspring-boot.run.arguments="reboot GigabitEthernet2"</code></pre>
           <ul>
             <li>PATCH <code>enabled=false</code></li>
             <li>Wait reboot interval</li>
@@ -108,12 +108,12 @@
         </div>
 
         <div class="panel" id="phase3" role="tabpanel">
-          <p>Run complete scenario in one command.</p>
-          <pre><code>python3 demo.py</code></pre>
+          <p>Run verification for the full Java workflow.</p>
+          <pre><code>./tools/verify.sh</code></pre>
           <ul>
-            <li>Starts mock server.</li>
-            <li>Runs search and reboot phases.</li>
-            <li>Prints summary suitable for demo day.</li>
+            <li>Builds the Java module.</li>
+            <li>Runs unit tests.</li>
+            <li>Runs a CLI smoke check.</li>
           </ul>
         </div>
         <aside class="speaker-notes">
@@ -161,9 +161,10 @@ Content-Type: application/yang-data+json</code></pre>
       <section class="card grading" data-slide="5">
         <h2>5) Quick Grading Checklist</h2>
         <ol>
-          <li>Run <code>python3 mock_server.py</code> in terminal 1.</li>
-          <li>Run <code>python3 find_device.py "Camera 2"</code> in terminal 2.</li>
-          <li>Run <code>python3 reboot_port.py GigabitEthernet2</code> in terminal 2.</li>
+          <li>Run <code>cd java && mvn clean package</code>.</li>
+          <li>Run <code>cd java && mvn test</code>.</li>
+          <li>Run <code>cd java && mvn spring-boot:run -Dspring-boot.run.arguments="find Camera 2"</code>.</li>
+          <li>Run <code>cd java && mvn spring-boot:run -Dspring-boot.run.arguments="reboot GigabitEthernet2"</code>.</li>
           <li>Run <code>./tools/verify.sh</code> for automated validation.</li>
         </ol>
         <aside class="speaker-notes">

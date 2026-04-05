@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>3.3.4</version>
         <relativePath/>
     </parent>
 
@@ -18,7 +18,7 @@
     <description>Spring Boot RESTCONF CRUD demo for Cisco IOS-XE and DevNet sandbox</description>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
@@ -55,7 +55,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
                 <configuration>
-                    <release>${java.version}</release>
+                    <release>17</release>
                 </configuration>
             </plugin>
             <plugin>

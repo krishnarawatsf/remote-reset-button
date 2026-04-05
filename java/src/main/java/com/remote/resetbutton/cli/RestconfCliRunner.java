@@ -28,10 +28,19 @@ public class RestconfCliRunner implements CommandLineRunner {
         String command = args[0].trim().toLowerCase();
         String value = joinArgs(args, 1);
 
-        switch (command) {
-            case "find" -> runFind(value);
-            case "reboot" -> runReboot(value);
-            default -> printUsage();
+        try {
+            switch (command) {
+                case "find" -> runFind(value);
+                case "reboot" -> runReboot(value);
+                default -> printUsage();
+            }
+        } catch (InterruptedException interruptedException) {
+            Thread.currentThread().interrupt();
+            System.out.println("Operation interrupted: " + interruptedException.getMessage());
+        } catch (IOException ioException) {
+            System.out.println("RESTCONF request failed: " + ioException.getMessage());
+        } catch (Exception exception) {
+            System.out.println("Command failed: " + exception.getMessage());
         }
     }
 

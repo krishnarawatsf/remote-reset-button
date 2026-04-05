@@ -49,7 +49,8 @@ public class RestconfClient {
         Request request = baseRequest(interfacePath(name))
             .get()
             .build();
-        return executeJson(request);
+        JsonObject root = executeJson(request);
+        return extractSingleInterface(root);
     }
 
     public int patchEnabled(String name, boolean enabled) throws IOException {
@@ -132,6 +133,40 @@ public class RestconfClient {
         if (root.has("interfaces")) {
             return root.getAsJsonObject("interfaces");
         }
+        return null;
+    }
+
+    private static JsonObject extractSingleInterface(JsonObject root) {
+        if (root == null) {
+            return null;
+        }
+
+        if (root.has("ietf-interfaces:interface")) {
+            JsonElement element = root.get("ietf-interfaces:interface");
+            if (element.isJsonObject()) {
+                return element.getAsJsonObject();
+            }
+            if (element.isJsonArray() && !element.getAsJsonArray().isEmpty()) {
+                JsonElement first = element.getAsJsonArray().get(0);
+                if (first.isJsonObject()) {
+                    return first.getAsJsonObject();
+                }
+            }
+        }
+
+        if (root.has("interface")) {
+            JsonElement element = root.get("interface");
+            if (element.isJsonObject()) {
+                return element.getAsJsonObject();
+            }
+            if (element.isJsonArray() && !element.getAsJsonArray().isEmpty()) {
+                JsonElement first = element.getAsJsonArray().get(0);
+                if (first.isJsonObject()) {
+                    return first.getAsJsonObject();
+                }
+            }
+        }
+
         return null;
     }
 
