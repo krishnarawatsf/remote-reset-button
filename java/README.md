@@ -1,37 +1,5 @@
-# Java Spring Boot RESTCONF Demo
+# Java RESTCONF Client
 
-This folder contains the Java conversion of the Remote Reset Button project.
+This folder contains the Java client demonstrating the implementation of pure CRUD (Create, Read, Update, Delete) methods towards a simulated RESTCONF interface.
 
-## Build
-
-```bash
-cd java
-mvn clean package
-```
-
-## Run against the local mock server
-
-Start the mock server first, then run:
-
-```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="find Camera 2"
-mvn spring-boot:run -Dspring-boot.run.arguments="reboot GigabitEthernet2"
-```
-
-## Run against Cisco DevNet IOS-XE sandbox
-
-Override the RESTCONF settings at runtime:
-
-```bash
-mvn spring-boot:run \
-  -Dspring-boot.run.arguments="find Camera 2" \
-  -Dspring-boot.run.jvmArguments="-Drestconf.host=devnetsandboxiosxe.cisco.com -Drestconf.port=443 -Drestconf.username=developer -Drestconf.password=C1sco12345 -Drestconf.use-https=true -Drestconf.skip-ssl-verification=true"
-```
-
-Use `reboot GigabitEthernet2` for the power-cycle flow.
-
-## Notes
-
-- The app uses OkHttp for RESTCONF calls.
-- Requests use `application/yang-data+json`.
-- PATCH updates only the `enabled` field.
+Please see the main `README.md` at the root of the project for instructions on how to build and run this client along with its required mock server!

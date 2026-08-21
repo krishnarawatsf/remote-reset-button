@@ -1,6 +1,10 @@
+target/
+**/target/
 __pycache__/
 *.pyc
 .DS_Store
 .vscode/
-java/target/
+.idea/
+*.iml
 java/.github/java-upgrade/*/logs/
+
