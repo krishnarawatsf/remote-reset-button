@@ -1,29 +1,37 @@
-package com.restconf.model;
+package com.mock.model;
 
-import com.google.gson.annotations.SerializedName;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 import java.util.Objects;
 
 /**
- * Domain model for an IETF Network Interface (RFC 8343 / RFC 8040).
+ * Domain model representing a Network Interface in the IETF YANG data model
+ * (ietf-interfaces:interfaces).
  */
 public class NetworkInterface {
 
-    @SerializedName("name")
+    @NotBlank(message = "Interface name cannot be blank")
+    @Pattern(regexp = "^[a-zA-Z0-9/_.-]+$", message = "Interface name contains invalid characters")
     private String name;
 
-    @SerializedName("description")
     private String description;
 
-    @SerializedName("type")
+    @NotBlank(message = "Interface type cannot be blank")
     private String type;
 
-    @SerializedName("enabled")
     private Boolean enabled;
 
-    @SerializedName("ipAddress")
+    @Pattern(
+        regexp = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.){3}(25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)$|^$",
+        message = "Invalid IPv4 address format"
+    )
     private String ipAddress;
 
-    @SerializedName("prefixLength")
+    @Min(value = 0, message = "Prefix length must be >= 0")
+    @Max(value = 128, message = "Prefix length must be <= 128")
     private Integer prefixLength;
 
     public NetworkInterface() {
@@ -37,10 +45,6 @@ public class NetworkInterface {
         this.enabled = enabled != null ? enabled : true;
         this.ipAddress = ipAddress;
         this.prefixLength = prefixLength;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public String getName() {
@@ -114,48 +118,5 @@ public class NetworkInterface {
                 ", ipAddress='" + ipAddress + '\'' +
                 ", prefixLength=" + prefixLength +
                 '}';
-    }
-
-    public static class Builder {
-        private String name;
-        private String description;
-        private String type = "iana-if-type:ethernetCsmacd";
-        private Boolean enabled = true;
-        private String ipAddress;
-        private Integer prefixLength;
-
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public Builder type(String type) {
-            this.type = type;
-            return this;
-        }
-
-        public Builder enabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public Builder ipAddress(String ipAddress) {
-            this.ipAddress = ipAddress;
-            return this;
-        }
-
-        public Builder prefixLength(Integer prefixLength) {
-            this.prefixLength = prefixLength;
-            return this;
-        }
-
-        public NetworkInterface build() {
-            return new NetworkInterface(name, description, type, enabled, ipAddress, prefixLength);
-        }
     }
 }
